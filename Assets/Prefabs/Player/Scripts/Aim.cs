@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Aim : MonoBehaviour {
 
     public Vector2 aimDegree;
     public TwitchClient tc;
 
-    private void Start()
+    public void Start()
     {
-        
+        tc = GameObject.Find("GameManager").GetComponentInChildren<TwitchClient>();
     }
 
     public void SetAimToAngle(int angle)

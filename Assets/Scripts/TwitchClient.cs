@@ -1,23 +1,27 @@
 ﻿using TwitchLib.Client.Models;
 using TwitchLib.Unity;
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System;
 
 public class TwitchClient : MonoBehaviour
 {
-
+    //public static TwitchClient Instance;
     private Client _client;
     public PlayerManager pm;
     public RoundManager rm;
     public Aim aim;
     public Bomb bomb;
-    public Fired Fired;
+    public Fired fired;
     public bool debugMode = true;
+    public GameObject Explosive;
+    public Camera MainCamera;
 
     [SerializeField] //[SerializeField] Allows the private field to show up in Unity's inspector. Way better than just making it public
     private string _channelToConnectTo = Secrets.USERNAME_FROM_OAUTH_TOKEN;
+
+    private void Awake()
+    {
+        //Instance = this;
+    }
 
     private void Start()
     {
@@ -263,29 +267,41 @@ public class TwitchClient : MonoBehaviour
                 if (rm.phase == "Attack")
                 {
                     string forceValue = e.Command.ChatMessage.Message;
-                    forceValue = forceValue.Replace("!attack ", "");
+                    forceValue = forceValue.Replace("!fire ", "");
                     int forceValueInt;
                     int.TryParse(forceValue, out forceValueInt);
-                    bool alreadyFired = Fired.alreadyFired;
+
+                    //Before we check if the player fired, we have to check the right player's script
+                    //to find that bool. Here we set up a local bool var and make it equal to the script's
+                    bool firedGO = GameObject.Find(name).GetComponentInChildren<Fired>().fired;
+                    //bool alreadyFiredGO = GameObject.Find(name).GetComponent<Fired>().fired;
 
                     //Do a check to see if the player already fired
-                    if (alreadyFired == false)
+                    if (firedGO == false)
                     {
                         //Do a check to see if the value is within reasonable bounds. If not, break.
                         if (forceValueInt > 0 && forceValueInt <= 5)
                         {
+                            //Grab the Bomb component from the player's prefab
+                            bomb = GameObject.Find(name).GetComponentInChildren<Bomb>();
                             //Fire the explosive at the forceValue specified
                             bomb.ThrowBomb(forceValueInt);
+                            Debug.Log("Throw Bomb Command Sent!");
 
                             //Set the fired bool to true so they can't fire again until the next round".
-                            Fired.fired = true;
+                            firedGO = true;
                         }
                         else
                         {
-                            //Player already fired. Ignore the command.
-                            Debug.Log("Player already fired, but tried firing again");
+                            //If the user made a typo we should ignore the command and break
                         }
                     }
+                    else
+                    {
+                        //Player already fired. Ignore the command.
+                        Debug.Log("Player already fired, but tried firing again");
+                    }
+
                 }
                 else
                 {

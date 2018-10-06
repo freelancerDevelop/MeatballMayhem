@@ -1,24 +1,23 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class RoundManager : MonoBehaviour {
 
     public GameStateManager gsm;
-    public Fired Fired;
+    public Fired fired;
     private int roundLimit = 20;
     public int currentRound;
     private float timer;
     public float timeLeft;
     public string phase;
     public bool startTimer = false;
+    public bool checkIfFired;
 
     // Use this for initialization
     void Start ()
     {
-        gsm = GetComponent<GameStateManager>();
+        gsm = GameObject.Find("GameManager").GetComponent<GameStateManager>();
         timer = 30f;
         timeLeft = 30f;
         phase = "Move";
@@ -48,6 +47,13 @@ public class RoundManager : MonoBehaviour {
                 else
                 {
                     StartCoroutine(StartMovePhase());
+                    //At the end of the round, gather all players into an array and
+                    //set their fired bools to false so they can fire again.
+                    GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+                    foreach (GameObject player in players)
+                    {
+                        GetComponent<Fired>().fired = false;
+                    }
                     Debug.Log("Now in move phase");
                     timeLeft = 30f;
                     timer = 30f;
@@ -67,8 +73,7 @@ public class RoundManager : MonoBehaviour {
     //Allow the player to fire once each round.
     public IEnumerator StartMovePhase()
     {
-        Fired.fired = false;
-        Fired.alreadyFired = false;
+        checkIfFired = false;
         yield return new WaitForSeconds(timeLeft);
     }
 
