@@ -47,8 +47,9 @@ namespace Destructible2D
 
 namespace Destructible2D
 {
-	// This component will stamp and damage any nearby Destructibles, add physics forces to nearby rigidbody2Ds, and destroy the current GameObject after a set time
-	[AddComponentMenu(D2dHelper.ComponentMenuPrefix + "Explosion")]
+
+    // This component will stamp and damage any nearby Destructibles, add physics forces to nearby rigidbody2Ds, and destroy the current GameObject after a set time
+    [AddComponentMenu(D2dHelper.ComponentMenuPrefix + "Explosion")]
 	public class D2dExplosion : MonoBehaviour
 	{
 		[Tooltip("The layers the explosion should work on")]
@@ -86,7 +87,27 @@ namespace Destructible2D
 		
 		protected virtual void Start()
 		{
-			if (Stamp == true)
+
+            float radius = 3;
+            float damage = 25;
+            RaycastHit2D[] objectsInRange = Physics2D.CircleCastAll(transform.position, radius, Vector2.zero);
+            foreach (RaycastHit2D col in objectsInRange)
+            {
+                Health health = col.collider.GetComponent<Health>();
+                if (health != null)
+                {
+                    //Linear falloff of effect
+                    float proximity = (col.transform.position - transform.position).magnitude;
+                    float effect = 0.5f + (0.5f * ((radius - proximity) / radius));
+                    //Put this value into a variable
+                    damage = damage * effect;
+
+                    int damageInt = (int)damage;
+                    health.ApplyDamage(damageInt);
+                }
+            }
+
+            if (Stamp == true)
 			{
 				var stampPosition = transform.position;
 				var stampAngle    = StampRandomDirection == true ? Random.Range(-180.0f, 180.0f) : 0.0f;

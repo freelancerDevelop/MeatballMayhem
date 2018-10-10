@@ -6,7 +6,7 @@ public class RoundManager : MonoBehaviour {
 
     public GameStateManager gsm;
     public Fired fired;
-    private int roundLimit = 20;
+    private int roundLimit = 21;
     public int currentRound;
     private float timer;
     public float timeLeft;
@@ -34,7 +34,7 @@ public class RoundManager : MonoBehaviour {
         {
             //Debug.Log(timer);
             timeLeft = timer -= Time.deltaTime;
-            if (timeLeft <= 0.0f && currentRound != 41)
+            if (timeLeft <= 0.0f && currentRound != roundLimit)
             {
                 if (phase == "Move")
                 {
@@ -47,13 +47,7 @@ public class RoundManager : MonoBehaviour {
                 else
                 {
                     StartCoroutine(StartMovePhase());
-                    //At the end of the round, gather all players into an array and
-                    //set their fired bools to false so they can fire again.
-                    GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-                    foreach (GameObject player in players)
-                    {
-                        GetComponent<Fired>().fired = false;
-                    }
+                    //Reset timer, change phase, and start the next round
                     Debug.Log("Now in move phase");
                     timeLeft = 30f;
                     timer = 30f;
@@ -61,7 +55,7 @@ public class RoundManager : MonoBehaviour {
                     currentRound += 1;
                 }
             }
-            else if (currentRound == roundLimit + 1) // WIN CONDITION: || players left/team remaining is one)
+            else if (currentRound == roundLimit) // WIN CONDITION: || players left/team remaining is one)
             {
                 startTimer = false;
                 Debug.Log("Round limit reached!");
@@ -73,7 +67,15 @@ public class RoundManager : MonoBehaviour {
     //Allow the player to fire once each round.
     public IEnumerator StartMovePhase()
     {
-        checkIfFired = false;
+        //At the end of the round, gather all players into an array and
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        Debug.Log("Resetting fire bools...");
+        foreach (GameObject player in players)
+        {
+            //Set every player's fired bool to false
+            player.GetComponent<Fired>().SetFiredFalse();
+        }
+        Debug.Log("Fire bools reset!");
         yield return new WaitForSeconds(timeLeft);
     }
 

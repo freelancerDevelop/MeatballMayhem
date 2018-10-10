@@ -98,7 +98,6 @@ public class TwitchClient : MonoBehaviour
 
             case "join":
 
-                _client.SendMessage(e.Command.ChatMessage.Channel, $"Attempting to join the game...");
                 Debug.Log("Checking for max players...");
 
                 if (debugMode == false && pm.playerList.Contains(name))
@@ -113,7 +112,7 @@ public class TwitchClient : MonoBehaviour
                     Debug.Log("A chatter tried to join the game but game is full...");
                     break;
                 }
-
+                _client.SendMessage(e.Command.ChatMessage.Channel, $"Joining the game!");
                 AddNewPlayer(name);
 
                 pm.playerName = name;
@@ -234,7 +233,6 @@ public class TwitchClient : MonoBehaviour
                 break;
 
             case "aim":
-                _client.SendMessage(e.Command.ChatMessage.Channel, $"Attempting to aim at location...");
                 //First we check if we're in the attack round.
                 if (rm.phase == "Attack")
                 {
@@ -250,6 +248,7 @@ public class TwitchClient : MonoBehaviour
                         //If the angle is acceptable, set the aim angle for the player.
                         //Get the player's instantiated prefab, and set angle on the attached aim script.
                         playerGO.GetComponent<Aim>().SetAimToAngle(aimAngleInt);
+                        _client.SendMessage(e.Command.ChatMessage.Channel, $"Attempting to aim at location...");
                     }
                     else
                     {
@@ -263,7 +262,6 @@ public class TwitchClient : MonoBehaviour
                 break;
 
             case "fire":
-                _client.SendMessage(e.Command.ChatMessage.Channel, $"Firing!");
                 if (rm.phase == "Attack")
                 {
                     string forceValue = e.Command.ChatMessage.Message;
@@ -271,13 +269,12 @@ public class TwitchClient : MonoBehaviour
                     int forceValueInt;
                     int.TryParse(forceValue, out forceValueInt);
 
-                    //Before we check if the player fired, we have to check the right player's script
-                    //to find that bool. Here we set up a local bool var and make it equal to the script's
-                    bool firedGO = GameObject.Find(name).GetComponentInChildren<Fired>().fired;
-                    //bool alreadyFiredGO = GameObject.Find(name).GetComponent<Fired>().fired;
+                    //Check the player's gameobject script called Fired to see if they fired already.
+                    var playerFired = GameObject.Find(name).GetComponentInChildren<Fired>();
+                    bool playerFiredBool = GameObject.Find(name).GetComponentInChildren<Fired>().DidPlayerFire();
 
                     //Do a check to see if the player already fired
-                    if (firedGO == false)
+                    if (playerFiredBool == false)
                     {
                         //Do a check to see if the value is within reasonable bounds. If not, break.
                         if (forceValueInt > 0 && forceValueInt <= 5)
@@ -286,10 +283,10 @@ public class TwitchClient : MonoBehaviour
                             bomb = GameObject.Find(name).GetComponentInChildren<Bomb>();
                             //Fire the explosive at the forceValue specified
                             bomb.ThrowBomb(forceValueInt);
-                            Debug.Log("Throw Bomb Command Sent!");
+                            _client.SendMessage(e.Command.ChatMessage.Channel, $"Firing!");
 
                             //Set the fired bool to true so they can't fire again until the next round".
-                            firedGO = true;
+                            playerFired.SetFiredTrue();
                         }
                         else
                         {
@@ -299,7 +296,7 @@ public class TwitchClient : MonoBehaviour
                     else
                     {
                         //Player already fired. Ignore the command.
-                        Debug.Log("Player already fired, but tried firing again");
+                        Debug.Log("Player already fired!");
                     }
 
                 }

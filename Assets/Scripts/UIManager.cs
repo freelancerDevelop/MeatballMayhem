@@ -12,9 +12,9 @@ public class UIManager : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
-        roundText.GetComponent<Text>().enabled = false;
-        phaseText.GetComponent<Text>().enabled = false;
-        timerText.GetComponent<Text>().enabled = false;
+        roundText.GetComponentInChildren<Text>().enabled = false;
+        phaseText.GetComponentInChildren<Text>().enabled = false;
+        timerText.GetComponentInChildren<Text>().enabled = false;
     }
 	
 	// Update is called once per frame

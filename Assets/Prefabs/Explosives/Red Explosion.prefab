@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 11458346}
   - component: {fileID: 11418418}
   - component: {fileID: 8237358}
-  - component: {fileID: 11479736}
   - component: {fileID: 11401416}
   m_Layer: 0
   m_Name: Red Explosion
@@ -47,7 +46,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.34, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 482708}
@@ -196,16 +195,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Mask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 768
   Stamp: 1
-  StampTex: {fileID: 2800000, guid: 6a07acbd4953fd744bc712a370a7d51e, type: 3}
+  StampTex: {fileID: 2800000, guid: 31fbfa5dbe879504b9ff7cd4a5e1cad3, type: 3}
   StampSize: {x: 1, y: 1}
   StampHardness: 1
   StampRandomDirection: 1
   Raycast: 1
-  RaycastRadius: 1
-  RaycastCount: 32
-  ForcePerRay: 20
+  RaycastRadius: 2
+  RaycastCount: 10
+  ForcePerRay: 0
   DamagePerRay: 1
 --- !u!114 &11449438
 MonoBehaviour:
@@ -229,18 +228,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee68f30327e7b8c49b456ba022e81845, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &11479736
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 694dd02f24b737247a594ec9a2714315, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Shake: 0.25
 --- !u!198 &19800000
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -9358,7 +9345,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 4
   m_RenderMode: 0
   m_SortMode: 0
   m_MinParticleSize: 0
