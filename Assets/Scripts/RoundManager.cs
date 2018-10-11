@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -6,6 +7,8 @@ public class RoundManager : MonoBehaviour {
 
     public GameStateManager gsm;
     public Fired fired;
+    public List<GameObject> playerList = new List<GameObject>();
+    private GameObject player;
     private int roundLimit = 21;
     public int currentRound;
     private float timer;
@@ -26,10 +29,10 @@ public class RoundManager : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        //Begin the game loop.
-        //Before we start the timer, we have to make sure the game has started according to GSM.
-        //First we'll check if the game state isn't finished, because if it is, we can stop the timer.
-        //Then we'll check if the GSM started the move phase already by turning the timer on.
+        //Begin the game loop
+        //Before we start the timer, we have to make sure the game has started according to GSM
+        //First we'll check if the game state isn't finished, because if it is, we can stop the timer
+        //Then we'll check if the GSM started the move phase already by turning the timer on
         if (!gsm.finished && startTimer)
         {
             //Debug.Log(timer);
@@ -64,30 +67,27 @@ public class RoundManager : MonoBehaviour {
         }
     }
 
-    //Allow the player to fire once each round.
     public IEnumerator StartMovePhase()
     {
-        //At the end of the round, gather all players into an array and
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        Debug.Log("Resetting fire bools...");
-        foreach (GameObject player in players)
+        //Loop through each player in our playerlist
+        foreach (GameObject player in playerList)
         {
-            //Set every player's fired bool to false
-            player.GetComponent<Fired>().SetFiredFalse();
+            //Set their fired boolean to false to prepare for next round
+            player.GetComponentInChildren<Fired>().SetFiredFalse();
         }
-        Debug.Log("Fire bools reset!");
+        //Start the round timer
         yield return new WaitForSeconds(timeLeft);
     }
 
-    //Once the timer has finished, we'll start the move phase again and the timer will, of course, reset.
+    //Once the timer has finished, we'll start the move phase again and the timer will, of course, reset
     public IEnumerator StartAttackPhase()
     {
         yield return new WaitForSeconds(timeLeft);
     }
 
-    //When our win condition has been found above in our Update(), we'll end the game accordingly.
-    //We'll wait 15 seconds so we can show who won on screen and then let GSM know the game is over.
-    //Then we'll hard-reset the game.
+    //When our win condition has been found above in our Update(), we'll end the game accordingly
+    //We'll wait 15 seconds so we can show who won on screen and then let GSM know the game is over
+    //Then we'll hard-reset the game
     public IEnumerator EndGame()
     {
         Debug.Log("Game has ended!");
@@ -98,10 +98,10 @@ public class RoundManager : MonoBehaviour {
     }
 
     //After the game is over and it's time to hard reset, reloading the scene should (does it?) default all the values back to default.
-    //This is the end of the game loop.
+    //This is the end of the game loop
     public void ResetGame()
     {
-        //Reset the game and start fresh.
+        //Reset the game and start fresh
         Debug.Log("Resetting...");
         SceneManager.LoadScene(0, LoadSceneMode.Single);
     }

@@ -114,6 +114,7 @@ public class TwitchClient : MonoBehaviour
                 }
                 _client.SendMessage(e.Command.ChatMessage.Channel, $"Joining the game!");
                 AddNewPlayer(name);
+                AddToFired(gameObject);
 
                 pm.playerName = name;
                 pm.SpawnPlayer();
@@ -270,8 +271,8 @@ public class TwitchClient : MonoBehaviour
                     int.TryParse(forceValue, out forceValueInt);
 
                     //Check the player's gameobject script called Fired to see if they fired already.
-                    var playerFired = GameObject.Find(name).GetComponentInChildren<Fired>();
-                    bool playerFiredBool = GameObject.Find(name).GetComponentInChildren<Fired>().DidPlayerFire();
+                    var playerFiredScript = GameObject.Find(name).GetComponent<Fired>();
+                    bool playerFiredBool = GameObject.Find(name).GetComponent<Fired>().DidPlayerFire();
 
                     //Do a check to see if the player already fired
                     if (playerFiredBool == false)
@@ -286,14 +287,14 @@ public class TwitchClient : MonoBehaviour
                             _client.SendMessage(e.Command.ChatMessage.Channel, $"Firing!");
 
                             //Set the fired bool to true so they can't fire again until the next round".
-                            playerFired.SetFiredTrue();
+                            playerFiredScript.SetFiredTrue();
                         }
                         else
                         {
                             //If the user made a typo we should ignore the command and break
                         }
                     }
-                    else
+                    else if (playerFiredBool == true)
                     {
                         //Player already fired. Ignore the command.
                         Debug.Log("Player already fired!");
@@ -302,7 +303,7 @@ public class TwitchClient : MonoBehaviour
                 }
                 else
                 {
-                    //Do nothing, because we're in the attack round or the player already fired.
+                    //Do nothing, because we're in the move round or the player already fired.
                 }
                 break;
         }
@@ -312,6 +313,11 @@ public class TwitchClient : MonoBehaviour
     {
         pm.playerList.Add(playerToAdd);
         pm.currentPlayers++;
+    }
+
+    private void AddToFired(GameObject gameObject)
+    {
+        rm.playerList.Add(gameObject);
     }
 
     private void AlreadyJoinedMessage()
