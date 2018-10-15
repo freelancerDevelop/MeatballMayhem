@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class RoundManager : MonoBehaviour {
 
     public GameStateManager gsm;
+    public AnnounceWinner aw;
     public Fired fired;
     public List<GameObject> playerList = new List<GameObject>();
     private GameObject player;
@@ -62,7 +63,7 @@ public class RoundManager : MonoBehaviour {
             {
                 startTimer = false;
                 Debug.Log("Round limit reached!");
-                StartCoroutine(EndGame());
+                StartCoroutine(aw.EndGameDraw());
             }
         }
     }
@@ -85,24 +86,12 @@ public class RoundManager : MonoBehaviour {
         yield return new WaitForSeconds(timeLeft);
     }
 
-    //When our win condition has been found above in our Update(), we'll end the game accordingly
-    //We'll wait 15 seconds so we can show who won on screen and then let GSM know the game is over
-    //Then we'll hard-reset the game
-    public IEnumerator EndGame()
-    {
-        Debug.Log("Game has ended!");
-        gsm.finished = true;
-        new WaitForSeconds(15);
-        ResetGame();
-        yield return null;
-    }
-
     //After the game is over and it's time to hard reset, reloading the scene should (does it?) default all the values back to default.
     //This is the end of the game loop
     public void ResetGame()
     {
         //Reset the game and start fresh
         Debug.Log("Resetting...");
-        SceneManager.LoadScene(0, LoadSceneMode.Single);
+        SceneManager.LoadScene(3, LoadSceneMode.Single);
     }
 }

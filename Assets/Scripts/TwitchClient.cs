@@ -8,6 +8,7 @@ public class TwitchClient : MonoBehaviour
     private Client _client;
     public PlayerManager pm;
     public RoundManager rm;
+    public AnnounceWinner aw;
     public Aim aim;
     public Bomb bomb;
     public Fired fired;
@@ -15,23 +16,15 @@ public class TwitchClient : MonoBehaviour
     public GameObject Explosive;
     public Camera MainCamera;
 
-    [SerializeField] //[SerializeField] Allows the private field to show up in Unity's inspector. Way better than just making it public
-    private string _channelToConnectTo = Secrets.USERNAME_FROM_OAUTH_TOKEN;
-
-    private void Awake()
-    {
-        //Instance = this;
-    }
-
     private void Start()
     {
-        // To keep the Unity application active in the background, you can enable "Run In Background" in the player settings:
-        // Unity Editor --> Edit --> Project Settings --> Player --> Resolution and Presentation --> Resolution --> Run In Background
-        // This option seems to be enabled by default in more recent versions of Unity. An aditional, less recommended option is to set it in code:
+        //Make the application run in the background so we don't disconnect from Twitch.
         Application.runInBackground = true;
 
+        string _channelToConnectTo = SetSecrets.Instance.USERNAME_FROM_OAUTH_TOKEN;
+
         //Create Credentials instance
-        ConnectionCredentials credentials = new ConnectionCredentials(Secrets.USERNAME_FROM_OAUTH_TOKEN, Secrets.OAUTH_TOKEN);
+        ConnectionCredentials credentials = new ConnectionCredentials(SetSecrets.Instance.USERNAME_FROM_OAUTH_TOKEN, SetSecrets.Instance.OAUTH_TOKEN);
 
         // Create new instance of Chat Client
         _client = new Client();
@@ -102,13 +95,13 @@ public class TwitchClient : MonoBehaviour
 
                 if (debugMode == false && pm.playerList.Contains(name))
                 {
-                    AlreadyJoinedMessage();
+                    _client.SendMessage(e.Command.ChatMessage.Channel, $"You've already joined and can't join again!");
                     break;
                 }
 
                 if (pm.atMaxPlayers)
                 {
-                    GameFullMessage();
+                    _client.SendMessage(e.Command.ChatMessage.Channel, $"Game is now full! Try joining after the game is over!");
                     Debug.Log("A chatter tried to join the game but game is full...");
                     break;
                 }
@@ -118,20 +111,13 @@ public class TwitchClient : MonoBehaviour
 
                 pm.playerName = name;
                 pm.SpawnPlayer();
+                AddToAlive(name);
 
                 Debug.Log("Spawning " + name + "!");
 
                 break;
-
-
+            
             //GAME COMMANDS
-            //-----------------------------------------------------------------------------
-            //Once we find the player's name in the player list, we set their Rigidbody2D as
-            //as var, process their full command from chat, remove the command text from the
-            //string, and parse the remaining text in the string as an int. Then we use the int
-            //value to move the stored Rigidbody2D.
-            //-----------------------------------------------------------------------------
-
             case "movel":
             case "mover":
 
@@ -320,13 +306,8 @@ public class TwitchClient : MonoBehaviour
         rm.playerList.Add(gameObject);
     }
 
-    private void AlreadyJoinedMessage()
+    private void AddToAlive(string player)
     {
-        _client.SendMessage(_channelToConnectTo, "You've already joined and can't join again!");
-    }
-
-    public void GameFullMessage()
-    {
-        _client.SendMessage(_channelToConnectTo, "Game is now full! Try joining after the game is over!");
+        aw.playersAlive.Add(player);
     }
 }

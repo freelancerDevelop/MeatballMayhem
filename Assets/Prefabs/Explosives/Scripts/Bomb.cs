@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Bomb : MonoBehaviour
 {
@@ -16,7 +15,7 @@ public class Bomb : MonoBehaviour
 
     public void ThrowBomb(int forceValueInt)
     {
-        //Instantiate the explosive on the player's transform.
+        //Instantiate the explosive on the player's transform
         GameObject bombInstance = Instantiate(Explosive, transform.position, Quaternion.identity);
         //Add force to the bomb by using the aim degree as a vector, and the forceValueInt 
         //that the player specified in the command
