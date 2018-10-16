@@ -40,6 +40,6 @@ public class KillWinner : MonoBehaviour {
         Debug.Log("Waiting for 10 seconds before resetting...");
         yield return new WaitForSeconds(10);
         yield return null;
-        rm.ResetGame();
+        StartCoroutine(rm.ResetGame());
     }
 }

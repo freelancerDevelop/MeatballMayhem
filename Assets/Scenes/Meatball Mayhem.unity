@@ -2691,8 +2691,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 446714229}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.623, y: -1.833, z: 0}
+  m_LocalScale: {x: 0.935, y: 0.661, z: 1}
   m_Children:
   - {fileID: 838568005}
   m_Father: {fileID: 606958533}
@@ -4153,18 +4153,18 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 40
+    m_FontSize: 60
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
-    m_MaxSize: 50
+    m_MaxSize: 60
     m_Alignment: 4
     m_AlignByGeometry: 1
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: sdfsdg
 --- !u!222 &818581018
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -12803,8 +12803,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1474512274}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.243, y: -1.804, z: 0}
+  m_LocalScale: {x: 0.97481996, y: 0.66535795, z: 1}
   m_Children:
   - {fileID: 1330679541}
   m_Father: {fileID: 606958533}
@@ -13730,7 +13730,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d0e500443b61c2498186c722a324daa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bombPrefab: {fileID: 189068, guid: 69c154abcd332304a92cbc94b1269611, type: 2}
+  bombPrefab: {fileID: 189068, guid: 1ab970c2ff94ee1469a1044fd6dd0ea9, type: 2}
   playerLocation: {fileID: 0}
   rm: {fileID: 1920727916}
 --- !u!114 &1920727920

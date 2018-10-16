@@ -25,7 +25,7 @@ public class PlayerManager : MonoBehaviour {
     {
         //If we reach the required maximum players and the game hasn't been started
         //Let the game manager know it should start.
-        if (currentPlayers == MaxPlayers.maxPlayers && !gsm.starting && !gsm.inprogress)
+        if (currentPlayers == PlayerPrefs.GetInt("Max Players") && !gsm.starting && !gsm.inprogress)
         {
             //Set the bools on maxplayers and in GSM to true so we can start the game.
             atMaxPlayers = true;
@@ -34,7 +34,7 @@ public class PlayerManager : MonoBehaviour {
             Debug.Log("Game is now full!");
         }
         //If someone tries to join the game while the game is already in progress
-        else if (currentPlayers == MaxPlayers.maxPlayers && !gsm.starting && gsm.inprogress)
+        else if (currentPlayers == PlayerPrefs.GetInt("Max Players") && !gsm.starting && gsm.inprogress)
         {
             //We should ignore that request.
         }

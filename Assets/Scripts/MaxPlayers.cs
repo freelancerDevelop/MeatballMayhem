@@ -24,19 +24,24 @@ public class MaxPlayers : MonoBehaviour
 
     void Start()
     {
-        //Check to see if player has ran the game before. If not, we set the maxplayers to 6, and let them adjust later.
-        if (!PlayerPrefs.HasKey("isFirstTime") || PlayerPrefs.GetInt("isFirstTime") == 1)
+        // Check to see if player has ran the game before. If not, we set the maxplayers to 6, and let them adjust later.
+        if (!PlayerPrefs.HasKey("isFirstTime") && PlayerPrefs.GetInt("isFirstTime") == 1)
         {
-            //Set and save all your PlayerPrefs here.
+            // Set and save all your PlayerPrefs here.
             PlayerPrefs.SetInt("Max Players", 6);
 
-            //Set the value of isFirstTime to be false in the PlayerPrefs.
+            // Set the value of isFirstTime to be false in the PlayerPrefs.
             PlayerPrefs.SetInt("isFirstTime", 0);
             PlayerPrefs.Save();
         }
+        else
+        {
+            maxPlayers = PlayerPrefs.GetInt("Max Players");
+            text.text = maxPlayers.ToString();
+        }
     }
 
-    // from button click event, call AdjustValue(true) if want to increase or AdjustValue(false) to decrease
+    // The bool is set to true or false depending on whether want to increase or decrease the max players.
     public void AdjustValue(bool increase)
     {
         // Clamp current value between min-max
@@ -45,7 +50,7 @@ public class MaxPlayers : MonoBehaviour
         PlayerPrefs.SetInt("Max Players", maxPlayers);
         PlayerPrefs.Save();
 
-        // Disable buttons if cannot increase/decrease
+        // Disable buttons if we cannot increase/decrease
         btnDecreasePlayers.interactable = maxPlayers > min;
         btnIncreasePlayers.interactable = maxPlayers < max;
     }

@@ -88,10 +88,12 @@ public class RoundManager : MonoBehaviour {
 
     //After the game is over and it's time to hard reset, reloading the scene should (does it?) default all the values back to default.
     //This is the end of the game loop
-    public void ResetGame()
+    public IEnumerator ResetGame()
     {
         //Reset the game and start fresh
         Debug.Log("Resetting...");
-        SceneManager.LoadScene(3, LoadSceneMode.Single);
+        SceneManager.UnloadSceneAsync(3);
+        SceneManager.LoadSceneAsync(3);
+        yield return null;
     }
 }
